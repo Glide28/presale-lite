@@ -4,7 +4,7 @@ import json
 import logging
 import unittest
 
-from app import documents, estimator, pricing, report
+from app import documents, estimator, pricing
 from app.config import Settings
 from app.llm import LLMError, MockLLM, parse_json_object
 from app.service import NotFound, PresaleService, ValidationError
