@@ -62,7 +62,7 @@ class PricingTests(unittest.TestCase):
 
 class DocumentTests(unittest.TestCase):
     def test_txt_utf8(self):
-        self.assertEqual(documents.extract_text("a.txt", "Привет".encode("utf-8")), "Привет")
+        self.assertEqual(documents.extract_text("a.txt", "Привет".encode()), "Привет")
 
     def test_txt_cp1251(self):
         self.assertEqual(documents.extract_text("a.txt", "Привет".encode("cp1251")), "Привет")

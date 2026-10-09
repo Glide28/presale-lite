@@ -104,10 +104,10 @@ with tab_in:
         for d in presale["documents"]:
             st.write(f"📄 {d['filename']}")
         upload = st.file_uploader("Загрузить ТЗ (txt, md, docx, pdf)", type=["txt", "md", "docx", "pdf"])
-        if upload and st.button("Загрузить файл"):
-            if call("POST", f"/presales/{selected}/documents", files={"file": (upload.name, upload.getvalue())}):
-                st.success("Файл загружен")
-                st.rerun()
+        if (upload and st.button("Загрузить файл")
+                and call("POST", f"/presales/{selected}/documents", files={"file": (upload.name, upload.getvalue())})):
+            st.success("Файл загружен")
+            st.rerun()
     with right:
         st.subheader("Ставки специалистов (необязательно)")
         st.caption("Если пусто — используются рыночные допущения.")
@@ -130,9 +130,9 @@ with tab_q:
     questions = st.session_state.get(f"q_{selected}", [])
     answers = [{"question": q, "answer": st.text_area(q, key=f"a_{selected}_{i}")}
                for i, q in enumerate(questions)]
-    if questions and st.button("Сохранить ответы"):
-        if call("PUT", f"/presales/{selected}/answers", json={"items": answers}):
-            st.success("Ответы сохранены")
+    if (questions and st.button("Сохранить ответы")
+            and call("PUT", f"/presales/{selected}/answers", json={"items": answers})):
+        st.success("Ответы сохранены")
 
 # ---------------- 3. результат ----------------
 with tab_res:

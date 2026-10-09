@@ -78,13 +78,13 @@ class FakeServer:
                     self.end_headers()
                     for word in content.split(" "):
                         chunk = {"choices": [{"delta": {"content": word + " "}}]}
-                        self.wfile.write(f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n".encode("utf-8"))
+                        self.wfile.write(f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n".encode())
                     self.wfile.write(b"data: {\"choices\": [{\"delta\": {}}]}\n\ndata: [DONE]\n\n")
                     return
                 self._send(200, {"choices": [{"message": {"content": content}}]})
 
             def _send(self, code, payload):
-                raw = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+                raw = json.dumps(payload, ensure_ascii=False).encode()
                 self.send_response(code)
                 self.send_header("Content-Type", "application/json")
                 self.send_header("Content-Length", str(len(raw)))
@@ -101,8 +101,8 @@ class FakeServer:
 
 
 def make_llm(server, **overrides):
-    params = dict(llm_provider="openai", llm_api_key="secret-key", llm_base_url=server.url,
-                  llm_model="test-model", llm_timeout=5, db_path=":memory:")
+    params = {"llm_provider": "openai", "llm_api_key": "secret-key", "llm_base_url": server.url,
+              "llm_model": "test-model", "llm_timeout": 5, "db_path": ":memory:"}
     params.update(overrides)
     settings = Settings(**params)
     return OpenAICompatibleLLM(settings), settings
@@ -284,7 +284,7 @@ class EndToEndWithRealClientTests(unittest.TestCase):
 
     def test_chat_context_contains_documents_answers_and_report(self):
         pid = self.svc.create("Система заявок", "Клиент", "Описание", [])["id"]
-        self.svc.upload_document(pid, "tz.txt", "Нужна интеграция с SAP".encode("utf-8"))
+        self.svc.upload_document(pid, "tz.txt", "Нужна интеграция с SAP".encode())
         self.svc.save_answers(pid, [("Нагрузка?", "100 пользователей")])
         self.svc.run_estimate(pid)
         self.srv.requests.clear()

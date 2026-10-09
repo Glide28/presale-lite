@@ -16,7 +16,8 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from typing import Iterator, Protocol
+from collections.abc import Iterator
+from typing import Protocol
 
 from app.config import Settings
 
@@ -72,7 +73,7 @@ class OpenAICompatibleLLM:
             ) from exc
 
     # --- таймаут ---
-    def _timeout_error(self) -> "LLMAccessError":
+    def _timeout_error(self) -> LLMAccessError:
         hints = []
         if self._s.llm_reasoning_effort != "none":
             hints.append("LLM_REASONING_EFFORT=none")
@@ -112,7 +113,7 @@ class OpenAICompatibleLLM:
         self._precheck()
         request = urllib.request.Request(
             f"{self._s.llm_base_url}/chat/completions",
-            data=json.dumps(payload).encode("utf-8"),
+            data=json.dumps(payload).encode(),
             headers={"Content-Type": "application/json",
                      "Authorization": f"Bearer {self._s.llm_api_key}"},
             method="POST",
@@ -138,7 +139,7 @@ class OpenAICompatibleLLM:
         except (urllib.error.URLError, TimeoutError) as exc:
             raise self._network_error(exc) from exc
 
-    def _network_error(self, exc: BaseException) -> "LLMAccessError":
+    def _network_error(self, exc: BaseException) -> LLMAccessError:
         return self._timeout_error() if self._is_timeout(exc) else LLMAccessError(f"LLM недоступен: {exc}")
 
     @staticmethod
@@ -352,7 +353,7 @@ def parse_json_object(raw: str) -> dict:
     except json.JSONDecodeError:
         start, end = cleaned.find("{"), cleaned.rfind("}")
         if start == -1 or end <= start:
-            raise LLMError("Ответ модели не содержит JSON")
+            raise LLMError("Ответ модели не содержит JSON") from None
         try:
             value = json.loads(cleaned[start:end + 1])
         except json.JSONDecodeError as exc:

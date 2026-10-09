@@ -4,6 +4,8 @@ from __future__ import annotations
 import logging
 import secrets
 
+from typing import Annotated
+
 from fastapi import Depends, FastAPI, File, Header, HTTPException, UploadFile
 from fastapi.responses import JSONResponse, PlainTextResponse, StreamingResponse
 from pydantic import BaseModel, Field
@@ -91,7 +93,7 @@ def create_app(settings: Settings | None = None, service: PresaleService | None 
         service.storage.delete_presale(pid)
 
     @app.post("/presales/{pid}/documents", status_code=201, dependencies=protected)
-    async def upload(pid: str, file: UploadFile = File(...)) -> dict:
+    async def upload(pid: str, file: Annotated[UploadFile, File()]) -> dict:
         content = await file.read(settings.max_upload_bytes + 1)
         return service.upload_document(pid, file.filename or "document", content)
 

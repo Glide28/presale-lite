@@ -53,7 +53,7 @@ class Settings:
     api_token: str = "demo-token"  # простой токен доступа к API
 
     @classmethod
-    def from_env(cls) -> "Settings":
+    def from_env(cls) -> Settings:
         load_dotenv()
         return cls(
             llm_provider=os.getenv("LLM_PROVIDER", "mock").strip().lower(),

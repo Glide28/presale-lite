@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Iterator
+from collections.abc import Iterator
 
 from app import pricing
 from app.llm import LLM, LLMAccessError, LLMError, parse_json_object

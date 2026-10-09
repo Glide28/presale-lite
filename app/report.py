@@ -48,10 +48,10 @@ def render_markdown(presale: dict, result: dict) -> str:
         "",
         "## Бюджет",
         f"- Разработка: {_money(effort['total_cost'])} ({effort['total_hours']:g} ч)",
-        f"- Гарантия ({result['warranty_budget']['percent']}%/год): "
-        f"{_money(result['warranty_budget']['annual_cost'])}",
-        f"- Поддержка ({result['support_budget']['title']}): "
-        f"{_money(result['support_budget']['annual_cost'])}/год",
+        (f"- Гарантия ({result['warranty_budget']['percent']}%/год): "
+         f"{_money(result['warranty_budget']['annual_cost'])}"),
+        (f"- Поддержка ({result['support_budget']['title']}): "
+         f"{_money(result['support_budget']['annual_cost'])}/год"),
         "",
         "### Расходы по месяцам",
         *(f"- Месяц {m['month']}: {_money(m['total'])}" for m in result["monthly_expenses"]),

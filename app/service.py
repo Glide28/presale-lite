@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Iterator
+from collections.abc import Iterator
 
 from app import documents, estimator, report
 from app.config import Settings
@@ -126,4 +126,4 @@ class PresaleService:
         return generate()
 
 
-__all__ = ["PresaleService", "ValidationError", "NotFound"]
+__all__ = ["NotFound", "PresaleService", "ValidationError"]
